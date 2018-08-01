@@ -28,6 +28,8 @@ int     main(int ac, char **av)
 {
     int                 port;
     int                 sock;
+    int                 r;
+    char                buff[1024];
     int                 client_sock;
     unsigned int        cs_len;
     struct sockaddr_in  client_sock_in;
@@ -37,6 +39,12 @@ int     main(int ac, char **av)
     port = atoi(av[1]);
     sock = create_server(port);
     client_sock = accept(sock, (struct sockaddr *)&client_sock_in, &cs_len);
+    r = read(client_sock, buff, 1023);
+    if (r > 0)
+    {
+        buff[r] = '\0';
+        printf("received %d bytes: [%s]\n", r, buff);
+    }
     close(client_sock);
     close(sock);
     return (0);
