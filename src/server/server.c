@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yacinesibous <yacinesibous@student.42.f    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/08/02 17:30:08 by yacinesibou       #+#    #+#             */
+/*   Updated: 2018/08/02 20:27:59 by yacinesibou      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../../includes/ft_p.h"
 #include <stdio.h>
 
@@ -36,16 +49,22 @@ int     main(int ac, char **av)
 
     if (ac != 2)
         usage(av[0]);
-    port = atoi(av[1]);
+    port = ft_atoi(av[1]);
     sock = create_server(port);
-    client_sock = accept(sock, (struct sockaddr *)&client_sock_in, &cs_len);
-    r = read(client_sock, buff, 1023);
-    if (r > 0)
+    ft_putendl("Listening on port 3000");
+    while (1)
     {
-        buff[r] = '\0';
-        printf("received %d bytes: [%s]\n", r, buff);
+        cs_len = sizeof(client_sock_in);
+        if ((client_sock = accept(sock, (struct sockaddr *)&client_sock_in, &cs_len)) < 0)
+        {
+            ft_putendl("Error accepting the client.");
+            return (1);
+        }
+        if ((r = read(client_sock, buff, 1023)) > 0)
+        {
+            printf("received %d bytes: [%s]\n", r, buff);
+        }    
     }
-    close(client_sock);
     close(sock);
     return (0);
 }

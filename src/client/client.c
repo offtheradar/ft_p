@@ -31,12 +31,29 @@ int     main(int ac, char **av)
 {
     int                 port;
     int                 sock;
+    char                line[400];
+    char                server_reply[2000];
     
     if (ac != 3)
         usage(av[0]);
     port = atoi(av[2]);
     sock = create_client(av[1], port);
-    write(sock, "hello!", 6);
+    ft_putstr("Connecting to port 3000\nft_p>");
+    while (1)
+    {   
+        ft_putendl("ft_p> ");
+        scanf("%s", line);
+        if (send(sock, line, ft_strlen(line), 0) < 0)
+        {
+            puts("Send failed.");
+            return (1);
+        }
+        if( recv(sock , server_reply , 2000 , 0) < 0)
+        {
+            puts("recv failed");
+            break;
+        }
+    }
     close(sock);
     return (0);
 }
